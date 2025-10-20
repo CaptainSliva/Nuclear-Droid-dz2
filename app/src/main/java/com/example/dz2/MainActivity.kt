@@ -22,10 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,19 +53,20 @@ class MainActivity : ComponentActivity() {
 @ExperimentalStdlibApi
 @Composable
 fun Greeting() {
-    var color by remember { mutableStateOf(Color.White) }
+    var colorState by rememberSaveable { mutableStateOf(Color.White.toArgb()) }
+    val color = Color(colorState)
 
     Column(modifier = Modifier.fillMaxSize().background(color), horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text("Color: ${color.value.toHexString().replace("00000000", "")}")
 
         Button(onClick = {
-            color = generateColor()
+            colorState = generateColor().toArgb()
         }) {
             Text(text = "Change screen color")
         }
         Button(onClick = {
-            color = Color.White
+            colorState = Color.White.toArgb()
         }) {
             Text(text = "Clear screen color")
         }
